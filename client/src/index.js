@@ -18,12 +18,14 @@ import FrontEndQuiz from './Components/Sidebar/Screens/FrontEndQuiz';
 import Balance from './Components/Sidebar/Screens/Balance';
 import Settings from './Components/Sidebar/Screens/Settings';
 import axios from 'axios';
+import {Toaster} from 'react-hot-toast';
 axios.defaults.baseURL ='http://localhost:8000';
 axios.defaults.withCredentials = true;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
+        <Toaster position='top-right' toastOptions={{duration: 2000}}/>
       <Router>
         {/* <Route path="/" element={<HomePage />} />
           <Route path="/next-page" element={<NextPage />} /> */}

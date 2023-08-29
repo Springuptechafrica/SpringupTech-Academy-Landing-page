@@ -11,23 +11,23 @@ import {
   Select,
   Stack,
   Text,
+  Toast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { toast } from 'react-hot-toast';
 function Form() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phoneNumber: '',
-    sex: '2', // Default value for female
+    username: '', // Default value for female
     password: '',
-    confirmPassword: '',
     agreeToTerms: false,
   });
-
+  const navigate = useNavigate();
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === 'checkbox' ? checked : value;
@@ -36,17 +36,23 @@ function Form() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const { firstName, lastName, email, username, password } = formData;
+    console.log(formData);
     try {
-      const response = await axios.post('your_endpoint_url_here', formData);
-
-      if (response.status === 200) {
-        // Handle success
-        console.log('Form submitted successfully');
+      const { formData } = await axios.post('/register', {
+        firstName,
+        lastName,
+        email,
+        username,
+        password,
+      });
+      if (formData.error) {
+        Toast.error(formData.error);
       } else {
-        // Handle errors
-        console.error('Form submission failed');
+        setFormData({});
+        toast.success('Registration Successful, welcome');
       }
+      navigate('/Dashboard');
     } catch (error) {
       console.error('An error occurred', error);
     }
@@ -54,7 +60,7 @@ function Form() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Container maxW="container.lg" mt={16} >
+      <Container maxW="container.lg" mt={16}>
         <div
           style={{
             display: 'flex',
@@ -62,7 +68,7 @@ function Form() {
             alignItems: 'center',
             height: '90vh',
           }}>
-          <Box maxW="lg" borderRadius="lg" alignItems="center" >
+          <Box maxW="lg" borderRadius="lg" alignItems="center">
             <div
               style={{
                 backgroundColor: 'teal.200',
